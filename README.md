@@ -1,7 +1,7 @@
 # Spinal Tumor Disparities: SEER Analysis
 
 ## Project Overview
-This project examines racial and ethnic differences in surgery receipt and survival status among adult and pediatric patients with spinal tumors. I selected this topic because it relates to my work as a neurosurgery resident and my interest in oncology and disparities research.
+My project examines racial and ethnic differences in surgery receipt and survival status among adult and pediatric patients with spinal tumors. I selected this topic because it relates to my work as a neurosurgery resident and my interest in oncology and disparities research.
 
 The notebook includes exploratory analysis, preprocessing, two inferential statistical analyses, and three supervised classification models.
 
