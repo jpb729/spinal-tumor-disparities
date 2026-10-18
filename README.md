@@ -70,9 +70,9 @@ The notebook includes a cell reporting installed Python and package versions.
 
 ## Execution
 In an environment permitted under the applicable SEER agreement:
-1. Open the notebook in Google Colab if that environment is authorized.
+1. Open the notebook in Google Colab.
 2. Run the cells in order.
-3. At the upload prompt, select the authorized CSV export.
+3. At the upload prompt, select the authorized CSV exported, included in the Canvas submission titled SEER_FINAL. 
 4. Review validation messages, warnings, and outputs.
 
 The upload uses file selection rather than a local Windows path. Other environments require replacing the Colab upload cell with a local CSV-reading step.
