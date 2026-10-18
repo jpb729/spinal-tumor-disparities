@@ -1,56 +1,86 @@
 # Spinal Tumor Disparities: SEER Analysis
 
-## Project Overview
-My project examines racial and ethnic differences in surgery receipt and survival status among adult and pediatric patients with spinal tumors. I selected this topic because it relates to my work as a neurosurgery resident and my interest in oncology and disparities research.
-
-The notebook includes exploratory analysis, preprocessing, two inferential statistical analyses, and three supervised classification models.
+## Overview
+This project examines racial and ethnic differences in surgery receipt and survival status among adult and pediatric patients with spinal tumors. It relates to my work as a neurosurgery resident and my interests in oncology and disparities research.
 
 ## Dataset
-- Source: SEER Research Data, 1975–2023 (November 2025 Submission)
+- Source: SEER Research Data, 1975–2023, November 2025 Submission
 - Website: https://seer.cancer.gov/data/
-- Selected cohort: 5,831 spinal tumor records diagnosed between 2010 and 2023
+- Cohort: 5,831 spinal tumor records diagnosed during 2010–2023
 - Original export: 25 columns
-- Outcome: Survival status at the study cutoff (0 = living, 1 = deceased)
+- Outcome: Survival status at the study cutoff, coded 0 = living and 1 = deceased
 
-SEER requires approved access. The patient-level CSV is not included in this repository. Saved notebook outputs can be viewed without the dataset, but rerunning the analysis requires the corresponding authorized export.
+The patient-level CSV is excluded because SEER restricts redistribution. Reproducing the analysis requires authorized access to the corresponding SEER export. Any processing environment must meet the applicable SEER agreement requirements.
 
-## Running the Notebook
-1. Open the `.ipynb` notebook in Google Colab.
-2. Select **Runtime → Run all**.
-3. When prompted, upload `SEER_FINAL.csv`.
-4. Allow the remaining cells to execute.
+## Notebook Workflow
+1. CSV upload, automated profiling, and input validation
+2. Descriptive statistics and exploratory visualizations
+3. Data cleaning, predictor selection, and treatment-time feature engineering
+4. Stratified 80/20 training/test split
+5. Training-only imputation, scaling, and categorical encoding
+6. Logistic regression, decision tree, and random forest classification
+7. Model evaluation and comparison
+8. Unadjusted chi-square analyses
+9. Adjusted logistic regression in the four most common histologies
+10. Interpretation and limitations
 
-The CSV must match the cohort and column names used in the notebook. A local Windows file path will not load the data into Colab.
+The notebook accepts compatible SEER exports with the required column names and coding. It is not designed for arbitrary datasets. Interpretation text describes the original cohort and must be reviewed if another dataset is used.
 
-Required Python libraries: pandas, matplotlib, seaborn, scipy, and scikit-learn.
+## Model Evaluation
+F1 is the primary comparison metric. Precision, recall, and ROC-AUC are also reported, with deceased status treated as the positive class. This priority was clarified after reviewing initial results, so model selection is exploratory.
 
-## Analytical Workflow
-- Data import, structure review, and validation
-- Descriptive statistics and exploratory visualizations
-- Review of coded missing and unavailable information
-- Predictor selection and treatment-time feature engineering
-- Stratified 80/20 training/test split
-- Training-only imputation, encoding, and scaling within model pipelines
-- Logistic regression, decision tree, and random forest classification
-- Evaluation using precision, recall, F1, and ROC-AUC
-- Chi-square tests of race/ethnicity versus survival status and surgery receipt
-- Interpretation and limitations
+| Model | Precision | Recall | F1 | ROC-AUC |
+|---|---:|---:|---:|---:|
+| Logistic regression | 0.753 | 0.619 | 0.679 | 0.856 |
+| Decision tree | 0.805 | 0.252 | 0.384 | 0.718 |
+| Random forest | 0.742 | 0.465 | 0.571 | 0.829 |
 
-## Initial Results
-Logistic regression had the highest test-set F1 score (0.679) and ROC-AUC (0.856). Its precision was 0.753 and recall was 0.619.
+Logistic regression had the highest observed F1. Confusion matrices and precision–recall curves provide additional information about classification errors and threshold tradeoffs.
 
-Unadjusted chi-square tests found overall associations between race/ethnicity and survival status (p = 0.00184) and surgery receipt (p = 0.00321).
+## Inferential Analyses
+Unadjusted chi-square tests found overall associations between race/ethnicity and:
+- Survival status: p = 0.00184
+- Surgery receipt: p = 0.00321
+
+An additional logistic regression included 3,487 records from the four most common histologies, adjusting for age band, sex, histology, and diagnosis year. None of the racial/ethnic comparisons with non-Hispanic White patients reached statistical significance.
+
+The restricted adjusted analysis and full-cohort comparisons address different populations. The adjusted findings do not establish that disparities are absent.
 
 ## Pipeline Enhancements
-The notebook documents five enhancements since the last submitted notebook (the updates):
-1. Additional validation and error handling
-2. Treatment-time missingness and top-coded-value indicators
-3. A reusable model-evaluation function
-4. An automated model-comparison table
-5. Confusion matrices and precision–recall curves
+- Input validation and explicit checks for unexpected codes
+- Treatment-time missingness and top-coded-value indicators
+- Reusable model-evaluation function
+- Automated comparison and highest-F1 model selection
+- Confusion matrices and precision–recall curves
+- Conditional Monte Carlo inference when expected counts are small
+- Software-version reporting
+- Small-cell suppression in surgery-by-race displays
+
+## Dependencies
+Python packages:
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- scipy
+- scikit-learn
+- statsmodels
+
+The notebook includes a cell reporting installed Python and package versions.
+
+## Execution
+In an environment permitted under the applicable SEER agreement:
+1. Open the notebook in Google Colab if that environment is authorized.
+2. Run the cells in order.
+3. At the upload prompt, select the authorized CSV export.
+4. Review validation messages, warnings, and outputs.
+
+The upload uses file selection rather than a local Windows path. Other environments require replacing the Colab upload cell with a local CSV-reading step.
 
 ## Limitations
-The disparities analyses are unadjusted and do not establish causation or unequal access to care. Survival status reflects unequal follow-up periods. Small racial/ethnic groups and ambiguous treatment categories require cautious interpretation. This is essentially a surrogate for access but there are so many confounders that I will take into account in my next analysis. The models include treatment information and are exploratory classifications, not predictions made at diagnosis or tools ready for clinical use. The adjusted models which take the confounders into account will definitely be more generalizable.
+Survival status reflects unequal follow-up rather than survival at a fixed interval. Treatment receipt does not directly measure access. Small groups, ambiguous treatment categories, and residual confounding limit interpretation.
+
+The adjusted model omits stage, treatment, and socioeconomic factors. Predictive models include treatment information and are exploratory classifications, not predictions made at diagnosis or tools ready for clinical use.
 
 ## Author
 Jean-Paul Bryant, MD, MS, MPH
